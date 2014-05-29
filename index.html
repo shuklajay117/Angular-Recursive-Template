@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>::Sample Application</title>
+</head>
+
+<body ng-app="SampleApplication">
+
+	<!-- Angular Templates -->
+	
+	<!-- For drawing checkbox item recursively -->
+	<script type="text/ng-template"  id="DrawCheckBox.html">
+		<input type="checkbox" ng-model="data.children.isChecked" ng-true-value=true ng-false-value=false />
+		<span>{{data.name}}</span>
+		<i ng-click="add(data)" class="action add-item"></i>
+		<i ng-click="deleteIt(data)" class="action remove-item"></i> <!-- <div style="clear:both"></div> -->
+		<ul>
+			<li ng-repeat="data in data.children" ng-include="'DrawCheckBox.html'"></li>
+		</ul>
+	</script>
+	
+	<!-- For drawing list of unchecked item recursively -->
+	<script type="text/ng-template"  id="UncheckedItems.html">
+		<div ng-hide="data.children.isChecked">{{data.name}}</div>
+		<span ng-repeat="data in data.children" ng-include="'UncheckedItems.html'"></span>
+	</script>
+	
+	<!-- For drawing list of all item recursively -->
+	<script type="text/ng-template"  id="ListAll.html">
+		<div>{{data.name}}</div>
+		<span ng-repeat="data in data.children" ng-include="'ListAll.html'"></span>
+	</script>
+	
+	<!-- Linking Angular & Config Files -->
+	<script type="text/javascript" src="js/lib/angular-1.0.js"></script>
+	<script type="text/javascript" src="js/app.js"></script>
+	
+	<!-- Linking Controllers -->
+	<script type="text/javascript" src="js/controllers/SampleAppCtrl.js"></script>
+	
+	<!-- Linking Controllers -->
+	<link rel="stylesheet" type="text/css" href="css/SampleApp.css" />
+
+	<!-- Application body -->
+	<div id="header">
+		<h1>Sample Application</h1>
+	</div>
+	
+	<div id="wrapper" ng-controller="SampleAppCtrl">
+		<ul class="tree-block">
+			<div class="pull-left">
+				<input type="button" value="Add Parent Item" ng-click="addParent()" class="bottom-space-twnty" />
+				<li ng-repeat="data in items" ng-include="'DrawCheckBox.html'"></li>
+			</div>
+			<div style="clear:both"></div>
+		</ul>
+		<div class="status-block v-top">
+			<div class="left-space-twnty ln-blck v-top">
+				<div ng-click="toggleUncheckedItems()" class="opt-menu bottom-space-twnty" ng-class="{'opt-menu-selected':viewOptions.isUncheckedVisible}"><span ng-show="!viewOptions.isUncheckedVisible">Show</span><span ng-show="viewOptions.isUncheckedVisible">Hide</span> Unchecked Items</div>
+				<div ng-show="viewOptions.isUncheckedVisible">
+					<div ng-repeat="data in items" ng-include="'UncheckedItems.html'"></div>
+				</div>
+			</div>
+			<div class="left-space-twnty ln-blck v-top">
+				<div ng-click="toggleAllItems()" class="opt-menu bottom-space-twnty" ng-class="{'opt-menu-selected':viewOptions.isAllVisible}"><span ng-show="!viewOptions.isAllVisible">Show</span><span ng-show="viewOptions.isAllVisible">Hide</span> All Items</div>
+				<div ng-show="viewOptions.isAllVisible">
+					<div ng-repeat="data in items" ng-include="'ListAll.html'"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
